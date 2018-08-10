@@ -1,0 +1,35 @@
+body {
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+}
+@media (min-width: 850px) {
+    body{ 
+        width: 800px;
+    }
+}
+h1 {
+    text-align: center;
+}
+.theader, .t_body{
+    display: flex;
+    padding: 10px;
+}
+.theader > .header {
+    font-weight: 900;
+    
+}
+.col, .header { 
+    flex: 1;
+    padding: 0 10px;
+}
+
+.publishers > .t_body:nth-child(2n+2) {
+    background: #e6e6e6;
+}
+
+@media (max-width: 590px) {
+    .theader, .t_body{
+        
+    }
+}

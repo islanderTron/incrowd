@@ -1,54 +1,47 @@
 import React, { Component } from 'react';
-// import InfiniteScroll from 'react-infinite-scroller';
-// import qwest from 'qwest';
-
 
 class Publisher extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tracks: [],
-            hasMoreItems: true,
-            nextHref: null
+            offset: 0,
+            limit: 10,
+            tracks: []
         };
+        this.handleEventScroll = this.handleEventScroll.bind(this);
     }
 
-    componentDidMount() {
-        var url="https://www.stellarbiotechnologies.com/media/press-releases/json";
+    handleEventScroll() { 
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            if(this.state.limit < 100) {
+                this.setState({
+                    limit: this.state.limit+5
+                })
+            }
+            this.fetchAPI();
+        }
+    }
+    
+    fetchAPI() {
+        var url="https://www.stellarbiotechnologies.com/media/press-releases/json?limit=" + this.state.limit;
+
         fetch(url)
         .then(res => res.json())
         .then(res => {
+            var newArr = [];
+            newArr.concat(res.news).concat(newArr);
             this.setState({
-                tracks: res.news
+                tracks: res.news,
             });
-        })
+        });
     }
 
-    // loadItems(page) {
-    //     var self = this;
-        
-    //     var url="https://www.stellarbiotechnologies.com/media/press-releases/json";
-
-    //     if(this.state.nextHref) {
-    //         url = this.state.nextHref;
-    //     }
-
-    //     qwest.get(url)
-    //     .then(function(xhr, resp) {
-    //         var tracks = self.state.tracks;
-    //         resp.news.map(track => {
-    //             console.log(track);
-    //             tracks.push(track.news);
-    //             this.setState({
-    //                 tracks: tracks,
-    //                 hasMoreItems:false
-    //             })
-    //         })
-    //     });
-    // }
+    componentDidMount() {
+        this.fetchAPI();
+        window.addEventListener("scroll", this.handleEventScroll, true)
+    }
 
     render() {
-        const loader = <div className="loader">Loading ...</div>;
         const simple = this.state.tracks.map( (x, i) => {
             return(
                     <div className="t_body" key={i}>
@@ -68,17 +61,7 @@ class Publisher extends Component {
                     <div className="header"> Date </div>
                     <div className="header"> Time </div>
                 </div>
-
                     {simple}
-                    {/* <InfiniteScroll 
-                        pageStart={0}
-                        loadMore={this.loadItems.bind(this)}
-                        hasMore={this.state.hasMoreItems}
-                        loader={loader}>
-                        
-                        {simple}
-
-                    </InfiniteScroll> */}
                 </div>
             </div>
         );

@@ -9,3 +9,6 @@ npm run
 
 ## :pencil2: Developer
 Paul Uncangco - Front End Developer 
+
+## :computer:	Screenshot
+![screenshot](screenshot.png)
